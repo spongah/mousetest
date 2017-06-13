@@ -4,7 +4,7 @@
     (window:resize)="updateSize()"
 >
   <div class="floater"
-    (mouseover)="moveFloater()"
+    (mousemove)="moveFloater()"
     [ngStyle]="
       {
         'margin-left' : floatX + 'px',
@@ -22,4 +22,8 @@
   Size X: {{ this.screenX }}
   <br>
   Size Y: {{ this.screenY }}
+  <br>
+  Floater X: {{ this.floatX }}
+  <br>
+  Floater Y: {{ this.floatY }}
 </div>
