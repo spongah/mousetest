@@ -1,0 +1,25 @@
+<div class="boundaries"
+    (mousemove)="updatePosition($event)"
+    (click)="updateSize()"
+    (window:resize)="updateSize()"
+>
+  <div class="floater"
+    (mousemove)="checkProximity($event)"
+    [ngStyle]="
+      {
+        'margin-left' : mouseX + 'px',
+        'margin-top' : mouseY + 'px'
+      }
+    "
+
+  >X</div>
+</div>
+<div class="statistics">
+  Position X: {{ this.mouseX }}
+  <br>
+  Position Y: {{ this.mouseY }}
+  <br>
+  Size X: {{ this.screenX }}
+  <br>
+  Size Y: {{ this.screenY }}
+</div>
