@@ -11,7 +11,7 @@ export class TestareaComponent implements OnInit {
   screenX : Number;
   screenY : Number;
   floatX : Number;
-  floadY : Number;
+  floatY : Number;
 
   constructor() { }
 
@@ -22,20 +22,26 @@ export class TestareaComponent implements OnInit {
   updatePosition(event) {
     this.mouseX = event.offsetX;
     this.mouseY = event.offsetY;
+    if (this.mouseX < 0) { this.mouseX = 0 }
+    if (this.mouseY < 0) { this.mouseY = 0 }
     // console.log(event);
   }
 
   updateSize() {
     this.screenX = window.innerWidth;
     this.screenY = window.innerHeight;
+
   }
 
-  checkProximity() {
-    var r = Math.round(Math.random() * 10);
-    console.log(r);
+  moveFloater() {
+    var r = Math.round((Math.random() * 10) * (Math.random() * 10));
+    var newX = r*10
+    r = Math.round((Math.random() * 10) * (Math.random() * 10));
+    var newY = r*10
+    console.log(newX + ',' + newY);
+    this.floatX = newX;
+    this.floatY = newY;
   }
 
-  moveFloater(x:Number, y:Number) {
-  }
 
 }

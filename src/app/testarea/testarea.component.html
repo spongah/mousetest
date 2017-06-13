@@ -4,11 +4,11 @@
     (window:resize)="updateSize()"
 >
   <div class="floater"
-    (mousemove)="checkProximity($event)"
+    (mouseover)="moveFloater()"
     [ngStyle]="
       {
-        'margin-left' : mouseX + 'px',
-        'margin-top' : mouseY + 'px'
+        'margin-left' : floatX + 'px',
+        'margin-top' : floatY + 'px'
       }
     "
 
