@@ -6,13 +6,15 @@ import { Component, OnInit, ElementRef } from '@angular/core';
   styleUrls: ['./testarea.component.css']
 })
 export class TestareaComponent implements OnInit {
-  mouseX: Number;
-  mouseY: Number;
-  screenX: Number;
-  screenY: Number;
-  floatX: Number;
-  floatY: Number;
-  DISTANCE: Number;
+  mouseX;
+  mouseY;
+  screenX;
+  screenY;
+  floatX;
+  floatY;
+  DISTANCE;
+  SPEED = 10;
+  myTimer;
 
   constructor(private elRef:ElementRef) {
   }
@@ -23,12 +25,14 @@ export class TestareaComponent implements OnInit {
   }
 
   updatePosition(event) {
-    this.mouseX = event.offsetX;
-    this.mouseY = event.offsetY;
-    if (this.mouseX < 0) { this.mouseX = 0 }
-    if (this.mouseY < 0) { this.mouseY = 0 }
-    // console.log(event);
-    this.checkProximity();
+    if (event.srcElement.className == 'boundaries') {
+      this.mouseX = event.offsetX;
+      this.mouseY = event.offsetY;
+      if (this.mouseX < 0) { this.mouseX = 0 }
+      if (this.mouseY < 0) { this.mouseY = 0 }
+      // console.log(event);
+      this.checkProximity();
+    }
   }
 
   updateSize() {
@@ -36,58 +40,104 @@ export class TestareaComponent implements OnInit {
     this.screenX = boundaries.offsetWidth;
     this.screenY = boundaries.offsetHeight;
     this.initFloater();
-    this.DISTANCE = Math.round(Number(this.screenX) / 10)
-      + (Number(this.screenY) / 10);
+    this.DISTANCE = Math.round(this.screenX / 15)
+      + (this.screenY / 15);
     console.log(this.DISTANCE);
   }
 
-  getRandom():number {
+  getRandom() {
     return Math.round(Math.random() * 10);
   }
 
   initFloater() {
-    this.floatX = Math.round(Number(this.screenX) / 2);
-    this.floatY = Math.round(Number(this.screenY) / 2);
+    this.floatX = Math.round(this.screenX / 2);
+    this.floatY = Math.round(this.screenY / 2);
   }
 
   checkProximity() {
-    const diffX = Number(this.floatX) - Number(this.mouseX);
-    const diffY = Number(this.floatY) - Number(this.mouseY);
+    const diffX = (this.floatX - this.mouseX);
+    const diffY = (this.floatY - this.mouseY);
+    var newX = this.floatX;
+    var newY = this.floatY;
     if (diffX > this.DISTANCE) {
-      this.floatX = Number(this.floatX) - Math.round(Math.abs(diffX)/2);
+      newX = this.floatX - Math.round(Math.abs(diffX)/2);
     }
     if (diffX < -(this.DISTANCE)) {
-      this.floatX = Number(this.floatX) + Math.round(Math.abs(diffX)/2);
+      newX = this.floatX + Math.round(Math.abs(diffX)/2);
     }
     if (diffY > this.DISTANCE) {
-      this.floatY = Number(this.floatY) - Math.round(Math.abs(diffY)/2);
+      newY = this.floatY - Math.round(Math.abs(diffY)/2);
     }
     if (diffY < -(this.DISTANCE)) {
-      this.floatY = Number(this.floatY) + Math.round(Math.abs(diffY)/2);
+      newY = this.floatY + Math.round(Math.abs(diffY)/2);
     }
-
+    if ((diffX > this.DISTANCE) || (diffX < -(this.DISTANCE))
+      || (diffY > this.DISTANCE) || (diffY < -(this.DISTANCE))) {
+        this.slideFloater(newX,newY);
+      }
   }
 
   moveFloater() {
-    var newX = Number(this.getRandom() * Number(this.DISTANCE));
-    var newY = Number(this.getRandom() * Number(this.DISTANCE));
-    if (this.getRandom() > 1) {
-      newX += Number(this.floatX);
+    var newX = this.getRandom() * (this.DISTANCE);
+    var newY = this.getRandom() * (this.DISTANCE);
+    if (this.getRandom() > 5) {
+      newX = this.floatX + (this.getRandom() * (this.DISTANCE));
     } else {
-      newX -= Number(this.floatX);
+      newX = this.floatX - (this.getRandom() * (this.DISTANCE));
     }
-    if (this.getRandom() > 1) {
-      newY += Number(this.floatY);
+    if (this.getRandom() > 5) {
+      newY = this.floatY + (this.getRandom() * (this.DISTANCE));
     } else {
-      newY -= Number(this.floatY);
+      newY = this.floatY - (this.getRandom() * (this.DISTANCE));
     }
 
     if (newX < 1) { newX = 1 }
     if (newY < 1) { newY = 1 }
-    if (newX > this.screenX) { newX = Number(this.screenX) }
-    if (newY > this.screenY) { newY = Number(this.screenY) }
-    this.floatX = newX;
-    this.floatY = newY;
+    if (newX > this.screenX) { newX = this.screenX }
+    if (newY > this.screenY) { newY = this.screenY }
+    if ((newX - this.mouseX) > this.DISTANCE) {
+      newX = this.mouseX + this.DISTANCE
+    }
+    if ((newX - this.mouseX) < -(this.DISTANCE)) {
+      newX = this.mouseX - this.DISTANCE
+    }
+    if ((newY - this.mouseY) > this.DISTANCE) {
+      newY = this.mouseY + this.DISTANCE
+    }
+    if ((newY - this.mouseY) < -(this.DISTANCE)) {
+      newY = this.mouseY - this.DISTANCE
+    }
+
+
+    this.slideFloater(newX,newY);
+  }
+
+  slideFloater(x,y) {
+    x = Math.round(x);
+    y = Math.round(y);
+    this.nudgeFloater(x,y);
+    clearTimeout(this.myTimer);
+    if ((this.floatX != x) || (this.floatY != y)) {
+      this.myTimer = setTimeout(() => {
+        this.nudgeFloater(x,y);
+        this.slideFloater(x,y);
+      }, this.SPEED);
+    }
+  }
+
+  nudgeFloater(x,y) {
+    if (this.floatX < x) { this.floatX++ }
+    if (this.floatX > x) { this.floatX-- }
+    if (this.floatY < y) { this.floatY++ }
+    if (this.floatY > y) { this.floatY-- }
+  }
+
+  wait(ms) {
+    const start = Date.now();
+    let now = start;
+    while (now - start < ms) {
+      now = Date.now();
+    }
   }
 
 
