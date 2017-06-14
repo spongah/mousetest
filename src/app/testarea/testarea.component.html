@@ -1,10 +1,12 @@
 <div class="boundaries"
     (mousemove)="updatePosition($event)"
+    (touchmove)="updatePosition($event)"
     (click)="updateSize()"
     (window:resize)="updateSize()"
 >
   <div class="floater"
     (mouseover)="moveFloater()"
+    (touchmove)="moveFloater()"
     [ngStyle]="
       {
         'margin-left' : floatX + 'px',
@@ -12,7 +14,7 @@
       }
     "
 
-  >X</div>
+  ><img src="assets/me.jpg" class="pic"></div>
 </div>
 <div class="statistics">
   Position X: {{ this.mouseX }}

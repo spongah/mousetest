@@ -13,7 +13,8 @@ export class TestareaComponent implements OnInit {
   floatX;
   floatY;
   DISTANCE;
-  SPEED = 10;
+  SPEED = 5;
+  SIZE = 100;
   myTimer;
 
   constructor(private elRef:ElementRef) {
@@ -40,8 +41,8 @@ export class TestareaComponent implements OnInit {
     this.screenX = boundaries.offsetWidth;
     this.screenY = boundaries.offsetHeight;
     this.initFloater();
-    this.DISTANCE = Math.round(this.screenX / 15)
-      + (this.screenY / 15);
+    this.DISTANCE = Math.round(this.screenX / 10)
+      + (this.screenY / 10);
     console.log(this.DISTANCE);
   }
 
@@ -50,8 +51,8 @@ export class TestareaComponent implements OnInit {
   }
 
   initFloater() {
-    this.floatX = Math.round(this.screenX / 2);
-    this.floatY = Math.round(this.screenY / 2);
+    this.floatX = Math.round(this.screenX / 2) - (this.SIZE / 2);
+    this.floatY = Math.round(this.screenY / 2) - (this.SIZE / 2);
   }
 
   checkProximity() {
@@ -73,7 +74,7 @@ export class TestareaComponent implements OnInit {
     }
     if ((diffX > this.DISTANCE) || (diffX < -(this.DISTANCE))
       || (diffY > this.DISTANCE) || (diffY < -(this.DISTANCE))) {
-        this.slideFloater(newX,newY);
+        this.slideFloater(newX-50,newY-50);
       }
   }
 
@@ -109,7 +110,7 @@ export class TestareaComponent implements OnInit {
     }
 
 
-    this.slideFloater(newX,newY);
+    this.slideFloater(newX-(this.SIZE / 2),newY-(this.SIZE / 2));
   }
 
   slideFloater(x,y) {
