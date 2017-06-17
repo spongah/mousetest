@@ -37,9 +37,7 @@ export class TestareaComponent implements OnInit {
         this.myFontSize -= (Math.random() / 100);
         switchy = true;
       }
-    }, 10
-    // (Math.round(Math.random() * 1000))
-    );
+    }, 10);
   }
 
   updatePosition(event) {
