@@ -16,7 +16,13 @@
 
   ><img src="assets/me.jpg" class="pic"></div>
 </div>
-<div class="statistics">
+<div class="statistics"
+  [ngStyle]="
+    {
+      'font-size' : myFontSize + 'em'
+    }
+  "
+>
   Position X: {{ this.mouseX }}
   <br>
   Position Y: {{ this.mouseY }}

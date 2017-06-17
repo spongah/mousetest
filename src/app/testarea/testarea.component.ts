@@ -16,6 +16,7 @@ export class TestareaComponent implements OnInit {
   SPEED = 5;
   SIZE = 100;
   myTimer;
+  myFontSize:number = 1.3;
 
   constructor(private elRef:ElementRef) {
   }
@@ -23,6 +24,22 @@ export class TestareaComponent implements OnInit {
   ngOnInit() {
     this.updateSize();
     this.initFloater();
+    this.undulateFont();
+  }
+
+  undulateFont() {
+    let switchy: Boolean = false;
+    let repeater = setInterval(() => {
+      if (switchy) {
+        this.myFontSize += (Math.random() / 100);
+        switchy = false;
+      } else {
+        this.myFontSize -= (Math.random() / 100);
+        switchy = true;
+      }
+    }, 10
+    // (Math.round(Math.random() * 1000))
+    );
   }
 
   updatePosition(event) {
